@@ -1,0 +1,118 @@
+
+# Build
+
+docker build --progress=plain -f Dockerfile.xeus5 --build-arg BUILD_IMAGE=ubuntu:24.04 --build-arg BASE_IMAGE=ubuntu:24.04 -t xeus5:24.04 .
+docker build --progress=plain -f Dockerfile.add_xeus_python5 --build-arg BUILD_IMAGE=xeus5:24.04 --build-arg BASE_IMAGE=ubuntu:24.04 -t xeus_python5:24.04 .
+docker build --progress=plain -f Dockerfile.miniconda --build-arg BASE_IMAGE=xeus_python5:24.04 -t miniconda_xeus:24.04 .
+
+# RUN
+
+docker run --net=host -w /userdir -v $(pwd)/userdir:/userdir -it miniconda_xeus:24.04 bash
+
+
+apt update -q -qq -y
+
+apt install -q -qq -y git wget python3
+
+wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh
+
+
+/opt/conda/bin/conda init bash
+echo "source /opt/conda/etc/profile.d/conda.sh" >> /root/.bashrc
+
+conda create -n jupyterlab-ext --override-channels --strict-channel-priority -c conda-forge -c nodefaults jupyterlab=4 nodejs=20 git copier=9 jinja2-time --yes
+
+conda activate jupyterlab-ext
+
+
+mkdir my_first_extension
+cd my_first_extension
+copier copy --trust https://github.com/jupyterlab/extension-template .
+
+---
+What is your extension kind?
+(Use arrow keys)
+ frontend
+ 
+Extension author name
+ Your Name
+ 
+Extension author email
+ your@name.org
+ 
+JavaScript package name
+ jupyterlab_apod
+ 
+Python package name
+ jupyterlab_apod
+ 
+Extension short description
+ Show a random NASA Astronomy Picture of the Day in a JupyterLab panel
+ 
+Does the extension have user settings?
+ N
+ 
+Do you want to set up Binder example?
+ Y
+ 
+Do you want to set up test for the extension?
+ Y
+ 
+Git remote repository URL
+ https://github.com/github_username/jupyterlab_apod
+---
+
+
+---- extension
+# clone the repository
+git clone https://github.com/jupyterlab/extension-examples.git jupyterlab-extension-examples
+
+# go to the extension examples folder
+cd jupyterlab-extension-examples
+
+# create a new environment
+conda env create
+
+# activate the environment
+conda activate jupyterlab-extension-examples
+
+# go to the hello world example
+cd hello-world
+
+# Required to deal with Yarn 3 workspace rules
+touch yarn.lock
+
+# install the extension in editable mode
+python -m pip install -e .
+
+# install your development version of the extension with JupyterLab
+jupyter labextension develop . --overwrite
+
+# build the TypeScript source after making changes
+jlpm run build
+
+# start JupyterLab
+jupyter lab
+-----
+
+
+pip install -ve .
+
+jupyter labextension develop --overwrite .
+
+jupyter lab --allow-root --no-browser --ip=0.0.0.0 --port=8889 --ServerApp.token=''
+
+# repos
+
+https://github.com/jupyterlab/extension-examples.git
+https://github.com/jupyter-widgets/ipywidgets.git
+https://github.com/jupyter-xeus/xcanvas.git
+https://github.com/jupyter-xeus/xwidgets.git
+https://github.com/jupyter-xeus/xeus-python.git
+https://github.com/jupyter-xeus/xeus-python-shell.git
+
+https://github.com/jupyter-widgets/pythreejs.git
+
+##
+https://github.com/jupyter-widgets/jupyterlab-sidecar.git
+https://stackoverflow.com/questions/74964576/display-dataframe-in-a-separate-panel-in-jupyter-lab
