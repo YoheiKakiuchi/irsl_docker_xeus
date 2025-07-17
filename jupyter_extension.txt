@@ -116,3 +116,4 @@ https://github.com/jupyter-widgets/pythreejs.git
 ##
 https://github.com/jupyter-widgets/jupyterlab-sidecar.git
 https://stackoverflow.com/questions/74964576/display-dataframe-in-a-separate-panel-in-jupyter-lab
+cmake .. -DENABLE_PYTHON=OFF -DBUILD_PYTHON_PLUGIN=OFF -DUSE_BUNDLED_PYBIND11=OFF
