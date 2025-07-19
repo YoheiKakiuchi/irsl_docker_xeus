@@ -4,6 +4,9 @@ set -e
 
 OUTPUT_DIR=/tmp/xeus5
 
+##
+PATH=$HOME/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+
 #### xeus
 ## json
 (mkdir json && wget https://github.com/nlohmann/json/archive/refs/tags/v3.11.3.tar.gz --quiet -O - | tar zxf - --strip-components 1 -C json)
