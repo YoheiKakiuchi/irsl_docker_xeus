@@ -2,10 +2,11 @@
 
 set -e
 
-OUTPUT_DIR=/tmp/xeus5
+OUTPUT_DIR=/opt/xeus5
 
 ##
-PATH=$HOME/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+export PATH=$HOME/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+export LD_LIBRARY_PATH=$HOME/.local/lib
 
 #### xeus
 ## json
@@ -42,3 +43,4 @@ PATH=$HOME/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/b
 ## xeus-python
 (mkdir -p xeus-python/build && wget https://github.com/jupyter-xeus/xeus-python/archive/refs/tags/0.17.4.tar.gz --quiet -O - | tar zxf - --strip-components 1 -C xeus-python)
 (cd xeus-python/build; /tmp/cmake/bin/cmake .. -DCMAKE_PREFIX_PATH=${OUTPUT_DIR} -DCMAKE_INSTALL_PREFIX=${OUTPUT_DIR} -DCMAKE_INSTALL_LIBDIR=lib -DPYTHON_EXECUTABLE=`which python3`; make install -j$(nproc) )
+
